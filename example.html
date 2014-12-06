@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="customizeJS example">
     <meta name="author" content="Stephan Detje">
-    <title>Tracking Surface</title>
+    <title>customize example</title>
 
     <script type="text/javascript" src="JS/jss.js"></script>
     <script type="text/javascript" src="JS/customize.js"></script>
@@ -26,7 +26,15 @@
 <h1 class="class1">Welcome!</h1>
 
 <script>
-    var cm = customize({})
+    var cm = customize({
+        colorScheme: [{
+            "background-color": "#444",
+            "color": "#bbb"
+        }, {
+            "background-color": "#bbb",
+            "color": "#444"
+        }]
+    })
     cm.setDefaultColorSchemeForClass("class1", "class2")
 </script>
 
