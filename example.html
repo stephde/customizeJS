@@ -27,15 +27,10 @@
 
 <script>
     var cm = customize({
-        colorScheme: [{
-            "background-color": "#444",
-            "color": "#bbb"
-        }, {
-            "background-color": "#bbb",
-            "color": "#444"
-        }]
+            colorScheme: [["#444","#bbb"],["#bbb", "#444"]]
     })
-    cm.setDefaultColorSchemeForClass("class1", "class2")
+
+    cm.setColorSchemeForClass(["class1", "class2"])
 </script>
 
 </body>
