@@ -60,8 +60,11 @@ var customize = function(config){
         classes.forEach(function(arg, i){
             if(i < scheme.length)
                 jss.set("." + arg, scheme[i])
-            else
+            else {
                 console.log("Not enough color schemes available to be set...")
+                if(i > 0)
+                    jss.set("." + arg, scheme[0])
+            }
         })
 
         return this

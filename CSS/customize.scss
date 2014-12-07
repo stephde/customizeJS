@@ -1,0 +1,12 @@
+.cmLogo {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 102px;
+  height: 50px;
+  float: right;
+
+  &:hover {
+    border: solid dimgray 3px;
+  }
+}
