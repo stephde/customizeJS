@@ -1,7 +1,15 @@
-.cmLogo {
+.cm-inactive {
+  display: none;
+  visibility: hidden;
+}
+
+.cm-container {
   position: absolute;
   top: 15px;
   right: 15px;
+}
+
+.cm-logo {
   width: 102px;
   height: 50px;
   float: right;

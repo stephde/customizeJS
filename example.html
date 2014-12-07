@@ -6,16 +6,24 @@
     <meta name="author" content="Stephan Detje">
     <title>customize example</title>
 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="JS/jss.js"></script>
+    <script type="text/javascript" src="JS/spectrum.js"></script>
     <script type="text/javascript" src="JS/customize.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="CSS/spectrum.css" />
     <link rel="stylesheet" type="text/css" href="CSS/application.css" />
     <link rel="stylesheet" type="text/css" href="CSS/customize.css" />
 
 </head>
 <body>
 
-<img src="img/logo.svg" alt="customizeJS logo" class="cmLogo">
+<div class="cm-container">
+    <img src="img/logo.svg" alt="customizeJS logo" class="cm-logo" onclick="openCustomizeDialog()">
+    <div class="cm-dialog cm-inactive">
+        <input type="text" class="cm-colorPicker" />
+    </div>
+</div>
 
 <div id="menu" class="class2">
     <h2 class="class2">Menu</h2>
@@ -33,6 +41,13 @@
     })
 
     cm.setColorSchemeForClass(["class1", "class2"])
+
+    function openCustomizeDialog(){
+        $(".cm-dialog").removeClass("cm-inactive")
+        $(".cm-colorPicker").spectrum({
+            color: "#f00"
+        })
+    }
 </script>
 
 </body>
