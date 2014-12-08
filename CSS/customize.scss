@@ -3,12 +3,6 @@
   visibility: hidden;
 }
 
-.cm-container {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
 .cm-logo {
   width: 102px;
   height: 50px;
@@ -17,4 +11,15 @@
   &:hover {
     border: solid dimgray 3px;
   }
+}
+
+#cm-container {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+#cm-dialog {
+  background-color: dimgray;
+  border: solid black 1px;
 }

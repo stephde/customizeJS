@@ -18,13 +18,6 @@
 </head>
 <body>
 
-<div class="cm-container">
-    <img src="img/logo.svg" alt="customizeJS logo" class="cm-logo" onclick="openCustomizeDialog()">
-    <div class="cm-dialog cm-inactive">
-        <input type="text" class="cm-colorPicker" />
-    </div>
-</div>
-
 <div id="menu" class="class2">
     <h2 class="class2">Menu</h2>
     <div class="class2"><a>Home</a></div>
@@ -36,17 +29,17 @@
 <h1 class="class1">Welcome!</h1>
 
 <script>
-    var cm = customize({
+    var cm = Customize({
             colorScheme: [["#444","#bbb"],["#bbb", "#444"]]
     })
 
     cm.setColorSchemeForClass(["class1", "class2"])
 
-    function openCustomizeDialog(){
-        $(".cm-dialog").removeClass("cm-inactive")
-        $(".cm-colorPicker").spectrum({
-            color: "#f00"
-        })
+
+    /*** event handling ***/
+
+    function toggleCustomizeDialog(){
+        $("#cm-dialog").toggleClass("cm-inactive")
     }
 </script>
 
