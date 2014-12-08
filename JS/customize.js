@@ -22,23 +22,24 @@ var Customize = function(config){
         'color': 'white'
     }],
         schemeDefined = false,
-        colorScheme = $.extend(true, {}, defaultColorScheme),
+        colorScheme = [],
         watchedClasses = []
 
     /*** config ***/
 
     this.setConfig = function (config) {
-        if(typeof config.colorScheme != 'undefined'){
-            colorScheme = []
-            config.colorScheme.forEach(function(arg){
-                colorScheme.push({
-                    'background-color': arg[0],
-                    'color': arg[1]
-                })
-            })
-
+        if(typeof(config.colorScheme) != 'undefined'){
+            this.setColorScheme(config.colorScheme)
             schemeDefined = true
+        }else{
+            this.setColorScheme(defaultColorScheme)
         }
+
+        if(typeof(config.watchedClasses) != 'undefined'){
+            this.setWatchedClasses(config.watchedClasses)
+        }
+
+        return this
     }
 
     /*** init html and frameworks ***/
@@ -117,23 +118,23 @@ var Customize = function(config){
         })
     }
 
+    this.setColorScheme = function(scheme){
+        //test if scheme is valid
+
+        colorScheme = []
+        scheme.forEach(function(arg){
+             colorScheme.push({
+                 'background-color': arg[0],
+                 'color': arg[1]
+             })
+         })
+    }
+
+    this.getColorScheme = function(){
+        return colorScheme
+    }
+
     /*** customizing colors ***/
-
-    this.setDefaultColorSchemeForClass = function(c1, c2){
-        jss.set("." + c1, defaultColorScheme[0])
-        if(typeof c2 != 'undefined')
-            jss.set("." + c2, defaultColorScheme[1])
-
-        return this
-    }
-
-    this.setColorSchemeForClass = function(classes){
-        this.setWatchedClasses(classes)
-
-        updateColorScheme()
-
-        return this
-    }
 
     function updateColorScheme(){
         var scheme
@@ -154,6 +155,12 @@ var Customize = function(config){
         })
     }
 
+    /*** render ***/
+
+    this.render = function(){
+        updateColorScheme()
+    }
+
     /*** event handling ***/
 
     //currently in html...
@@ -164,7 +171,7 @@ var Customize = function(config){
         return Object.prototype.toString.call(obj) === '[object Array]'
     }
 
-    if(typeof config != 'undefined')
+    //if(typeof config != 'undefined')
         this.setConfig(config)
 
     initCustomize()
