@@ -4,6 +4,6 @@ node_js:
 branches:
   only:
     - master
-    - gh-pages
+    - dev
 before_script:
     - "npm i -g jasmine-node"
