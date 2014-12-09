@@ -58,6 +58,11 @@ describe("Customize JS test suite", function(){
             div1.remove()
             div2.remove()
         })
+
+        it("should initialize the color pickers with spectrum", function(){
+
+            expect($("#cm-dialog").children(".sp-replacer").length).toEqual(2)
+        })
     })
 
     describe("setter", function(){
@@ -73,6 +78,17 @@ describe("Customize JS test suite", function(){
             cm.setWatchedClasses(classes)
 
             expect(cm.getWatchedClasses()).toEqual(["class1", "class2"])
+        })
+
+        it("should set default color scheme if none specified", function(){
+            cm.setColorScheme()
+            expect(cm.getColorScheme()[0]).toEqual(['white','black'])
+        })
+
+        it("should set color scheme", function(){
+            var colorScheme = [["red", "blue"],["blue","red"]]
+            cm.setColorScheme(colorScheme)
+            expect(cm.getColorScheme()).toEqual(colorScheme)
         })
     })
 })

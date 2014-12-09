@@ -14,14 +14,8 @@ var Customize = function(config){
 
     /*** variables ***/
 
-    var defaultColorScheme = [{
-        'background-color': 'white',
-        'color': 'black'
-    }, {
-        'background-color': 'black',
-        'color': 'white'
-    }],
-        schemeDefined = false,
+    var defaultColorScheme = [  ['white','black'],
+                                ['black','white']],
         colorScheme = [],
         watchedClasses = []
 
@@ -31,17 +25,14 @@ var Customize = function(config){
         if(typeof(config) != 'undefined') {
             if (typeof(config.colorScheme) != 'undefined') {
                 this.setColorScheme(config.colorScheme)
-                schemeDefined = true
-            } else {
-                this.setColorScheme(defaultColorScheme)
-            }
+            }else
+                this.setColorScheme()
 
             if (typeof(config.watchedClasses) != 'undefined') {
                 this.setWatchedClasses(config.watchedClasses)
             }
-        }else{
-            this.setColorScheme(defaultColorScheme)
-        }
+        }else
+            this.setColorScheme()
 
         return this
     }
@@ -129,15 +120,18 @@ var Customize = function(config){
     }
 
     this.setColorScheme = function(scheme){
-        //test if scheme is valid
-
         colorScheme = []
-        scheme.forEach(function(arg){
-             colorScheme.push({
-                 'background-color': arg[0],
-                 'color': arg[1]
-             })
-         })
+
+        //test if scheme is valid
+        if(typeof(scheme) != 'undefined') {
+            scheme.forEach(function (arg) {
+                colorScheme.push({
+                    'background-color': arg[0],
+                    'color': arg[1]
+                })
+            })
+        }else
+            this.setColorScheme(defaultColorScheme)
     }
 
     this.getColorScheme = function(){
@@ -153,20 +147,13 @@ var Customize = function(config){
     /*** customizing colors ***/
 
     function updateColorScheme(){
-        var scheme
-
-        if(schemeDefined)
-            scheme  = colorScheme
-        else
-            scheme = defaultColorScheme
-
         watchedClasses.forEach(function(arg, i){
-            if(i < scheme.length)
-                jss.set("." + arg, scheme[i])
+            if(i < colorScheme.length)
+                jss.set("." + arg, colorScheme[i])
             else {
                 console.log("Not enough color schemes available to be set...")
                 if(i > 0)
-                    jss.set("." + arg, scheme[0])
+                    jss.set("." + arg, colorScheme[0])
             }
         })
     }
@@ -187,8 +174,7 @@ var Customize = function(config){
         return Object.prototype.toString.call(obj) === '[object Array]'
     }
 
-    //if(typeof config != 'undefined')
-        this.setConfig(config)
+    this.setConfig(config)
 
     initCustomize()
 
