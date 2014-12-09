@@ -1,0 +1,9 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "description": "CustomizeJS is a framework which aims to make a website customizable on client side",
+  "homepage": "http://stephde.github.io/",
+  "scripts": {
+    "test": "jasmine-node tests/*.spec.js"
+  }
+}
