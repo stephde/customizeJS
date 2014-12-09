@@ -28,15 +28,19 @@ var Customize = function(config){
     /*** config ***/
 
     this.setConfig = function (config) {
-        if(typeof(config.colorScheme) != 'undefined'){
-            this.setColorScheme(config.colorScheme)
-            schemeDefined = true
+        if(typeof(config) != 'undefined') {
+            if (typeof(config.colorScheme) != 'undefined') {
+                this.setColorScheme(config.colorScheme)
+                schemeDefined = true
+            } else {
+                this.setColorScheme(defaultColorScheme)
+            }
+
+            if (typeof(config.watchedClasses) != 'undefined') {
+                this.setWatchedClasses(config.watchedClasses)
+            }
         }else{
             this.setColorScheme(defaultColorScheme)
-        }
-
-        if(typeof(config.watchedClasses) != 'undefined'){
-            this.setWatchedClasses(config.watchedClasses)
         }
 
         return this
@@ -100,6 +104,8 @@ var Customize = function(config){
         }).addClass("cm-colorPicker"))
 
         initSpectrum()
+
+        this.render()
     }
 
     /*** getter & setter ***/
@@ -108,7 +114,7 @@ var Customize = function(config){
         watchedClasses = []
         var arr = []
 
-        if(!isArray(classes) && classes.contains(" "))
+        if(!isArray(classes) && (classes.indexOf(" ") > -1))
             arr = classes.split(" ")
         else
             arr = classes
@@ -116,6 +122,10 @@ var Customize = function(config){
         arr.forEach(function(elem){
             watchedClasses.push(elem)
         })
+    }
+
+    this.getWatchedClasses = function(){
+        return watchedClasses
     }
 
     this.setColorScheme = function(scheme){
@@ -131,7 +141,13 @@ var Customize = function(config){
     }
 
     this.getColorScheme = function(){
-        return colorScheme
+        var scheme = []
+
+        colorScheme.forEach(function(elem){
+            scheme.push([elem['background-color'], elem['color']])
+        })
+
+        return scheme
     }
 
     /*** customizing colors ***/
