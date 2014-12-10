@@ -59,6 +59,8 @@ var Customize = function(config){
                 updateColorScheme()
             }
         })
+
+        $(".sp-replacer.sp-light").addClass("cm-colorPicker")
     }
 
     function initCustomize(){
@@ -85,11 +87,23 @@ var Customize = function(config){
 
 
         //add color Pickers
-        dialog.append($('<input>', {
+
+        var pc = $('<div>', {}).addClass("cm-colorPickerContainer")
+        dialog.append(pc)
+        pc.append($('<div>', {
+            text: "Font Color"
+        }).addClass("cm-colorPickerTitle"))
+        pc.append($('<input>', {
             id: "cm-fontColorPicker",
             type: "text"
         }).addClass("cm-colorPicker"))
-        dialog.append($('<input>', {
+
+        pc = $('<div>', {}).addClass("cm-colorPickerContainer")
+        dialog.append(pc)
+        pc.append($('<div>', {
+            text: "Background Color"
+        }).addClass("cm-colorPickerTitle"))
+        pc.append($('<input>', {
             id: "cm-bgColorPicker",
             type: "text"
         }).addClass("cm-colorPicker"))
