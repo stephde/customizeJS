@@ -17,7 +17,8 @@ var Customize = function(config){
     var defaultColorScheme = [  ['white','black'],
                                 ['black','white']],
         colorScheme = [],
-        watchedClasses = []
+        watchedClasses = [],
+        currentClass = 0
 
     /*** config ***/
 
@@ -85,9 +86,11 @@ var Customize = function(config){
         }).addClass("cm-inactive"))
         container.append(dialog)
 
+        dialog.append($('<div>', {
+            text: ""
+        }).addClass("cm-currentClass"))
 
         //add color Pickers
-
         var pc = $('<div>', {}).addClass("cm-colorPickerContainer")
         dialog.append(pc)
         pc.append($('<div>', {
@@ -123,6 +126,12 @@ var Customize = function(config){
             arr = classes.split(" ")
         else
             arr = classes
+
+        //set class name in dialog
+        if(classes.length > 0)
+            $(document).ready(function(){
+                $(".cm-currentClass").text(classes[0])
+            })
 
         arr.forEach(function(elem){
             watchedClasses.push(elem)
