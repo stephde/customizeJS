@@ -3,7 +3,9 @@
  */
 
 describe("Customize JS test suite", function(){
-    var cm = Customize() //empty customizer
+    var cm = Customize(), //empty customizer
+        classes = ["FirstClass", "Economy"],
+        colorScheme = [["white", "white"], ["blue", "red"]]
 
     it("should include customizeJS", function() {
         expect(Customize).not.toBeUndefined()
@@ -45,12 +47,12 @@ describe("Customize JS test suite", function(){
 
         it("should have set defafult color scheme after initialization", function(){
             var body = $("body")
-                div1 = $('<div>').addClass("test-class1"),
-                div2 = $('<div>').addClass("test-class2")
+                div1 = $('<div>').addClass(classes[0]),
+                div2 = $('<div>').addClass(classes[1])
             body.append(div1)
             body.append(div2)
 
-            Customize({watchedClasses: ["test-class1", "test-class2"]})
+            Customize({watchedClasses: classes})
 
             expect(div1.css("background-color")).toEqual("rgb(255, 255, 255)")
             expect(div2.css("background-color")).toEqual("rgb(0, 0, 0)")
@@ -63,21 +65,31 @@ describe("Customize JS test suite", function(){
 
             expect($(".cm-colorPickerContainer").children(".sp-replacer").length).toEqual(2)
         })
+
+        it("should set default or parameter colors on the colorpickers", function(){
+            expect($("#cm-fontColorPicker").spectrum("get").toName()).toEqual("white")
+            expect($("#cm-bgColorPicker").spectrum("get").toName()).toEqual("black")
+        })
     })
 
     describe("setter", function(){
         it("should set watched classes from array", function(){
-            var classes = ["class1", "class2"]
             cm.setWatchedClasses(classes)
 
             expect(cm.getWatchedClasses()).toEqual(classes)
         })
 
         it("should set watched classes from string", function(){
-            var classes = "class1 class2"
-            cm.setWatchedClasses(classes)
+            var classesstr = "class1 class2"
+            cm.setWatchedClasses(classesstr)
 
             expect(cm.getWatchedClasses()).toEqual(["class1", "class2"])
+        })
+
+        it("should set dialog title on setWatchedClasses", function(){
+            cm.setWatchedClasses(classes)
+
+            expect($(".cm-currentClass").first().text()).toEqual(classes[0])
         })
 
         it("should set default color scheme if none specified", function(){
@@ -86,9 +98,26 @@ describe("Customize JS test suite", function(){
         })
 
         it("should set color scheme", function(){
-            var colorScheme = [["red", "blue"],["blue","red"]]
             cm.setColorScheme(colorScheme)
             expect(cm.getColorScheme()).toEqual(colorScheme)
+        })
+    })
+
+    describe("event handling functions", function(){
+        it("should change the dialog class in the title on next class", function(){
+            cm.setWatchedClasses(classes)
+            cm.onNextClass()
+
+            expect($(".cm-currentClass").first().text()).toEqual(classes[1])
+        })
+
+        it("should set colors in the colorPickers on next class", function(){
+            cm.setWatchedClasses(classes)
+            cm.setColorScheme(colorScheme)
+            cm.onNextClass()
+
+            expect($("#cm-fontColorPicker").spectrum("get").toName()).toEqual(colorScheme[1][1])
+            expect($("#cm-bgColorPicker").spectrum("get").toName()).toEqual(colorScheme[1][0])
         })
     })
 })

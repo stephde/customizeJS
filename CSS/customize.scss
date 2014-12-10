@@ -3,6 +3,35 @@
   visibility: hidden;
 }
 
+.cm-arrowRight {
+  position: relative;
+  float: right;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 12px solid black;
+
+  &:hover {
+    border-left-color: dimgray;
+  }
+}
+
+.cm-arrowLeft {
+  position: relative;
+  float: left;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid black;
+
+  &:hover {
+    border-right-color: dimgray;
+
+  }
+}
+
 .cm-logo {
   width: 102px;
   height: 50px;
@@ -29,6 +58,15 @@
   padding: 5px;
 }
 
+.cm-dialogHeader {
+  display: inline-flex;
+  width: 100%;
+  vertical-align: middle;
+  border-bottom: dashed 2px dimgray;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
 .cm-colorPickerContainer {
   display: inline-block;
   width: 100%;
@@ -45,6 +83,7 @@
 }
 
 .cm-currentClass {
+  width: 100%;
   text-align: center;
   font-size: larger;
   font-weight: bold;
