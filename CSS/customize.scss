@@ -20,6 +20,22 @@
 }
 
 #cm-dialog {
-  background-color: dimgray;
+  background-color: lightgray;
   border: solid black 1px;
+}
+
+.cm-colorPickerContainer {
+  display: inline-block;
+  width: 60%;
+  align-content: center;
+}
+
+.cm-colorPickerTitle {
+  float: left;
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.cm-colorPicker {
+  float: right;
 }

@@ -61,7 +61,7 @@ describe("Customize JS test suite", function(){
 
         it("should initialize the color pickers with spectrum", function(){
 
-            expect($("#cm-dialog").children(".sp-replacer").length).toEqual(2)
+            expect($(".cm-colorPickerContainer").children(".sp-replacer").length).toEqual(2)
         })
     })
 
