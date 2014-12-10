@@ -47,14 +47,10 @@ var Customize = function(config){
                 $(".cm-dialog").addClass("cm-inactive")
             },
             change: function(color){
-                colorScheme[0] = {
-                    'background-color': $("#cm-fontColorPicker").spectrum("get").toHexString(),
-                    'color': $("#cm-bgColorPicker").spectrum("get").toHexString()
-                }
-                colorScheme[1] = {
-                    'background-color': $("#cm-bgColorPicker").spectrum("get").toHexString(),
-                    'color': $("#cm-fontColorPicker").spectrum("get").toHexString()
-                }
+                colorScheme[currentClass] = createSchemeFromColors(
+                    [$("#cm-bgColorPicker").spectrum("get").toHexString(),
+                    $("#cm-fontColorPicker").spectrum("get").toHexString()]
+                )
 
                 updateColorScheme()
             }
@@ -90,11 +86,15 @@ var Customize = function(config){
             var dialogHeader = $('<div>', {}).addClass("cm-dialogHeader")
             dialog.append(dialogHeader)
 
-            dialogHeader.append($('<div>', {}).addClass("cm-arrowLeft"))
+            dialogHeader.append($('<div>', {
+                onclick: "prevClass()"
+            }).addClass("cm-arrowLeft"))
             dialogHeader.append($('<div>', {
                 text: ""
             }).addClass("cm-currentClass"))
-            dialogHeader.append($('<div>', {}).addClass("cm-arrowRight"))
+            dialogHeader.append($('<div>', {
+                onclick: "nextClass()"
+            }).addClass("cm-arrowRight"))
 
             //add color Pickers
             var pc = $('<div>', {}).addClass("cm-colorPickerContainer")
@@ -129,6 +129,7 @@ var Customize = function(config){
 
     this.setWatchedClasses = function(classes){
         watchedClasses = []
+        currentClass = 0
         var arr = []
 
         if(!isArray(classes) && (classes.indexOf(" ") > -1))
@@ -159,10 +160,7 @@ var Customize = function(config){
         //test if scheme is valid
         if(typeof(scheme) != 'undefined') {
             scheme.forEach(function (arg) {
-                colorScheme.push({
-                    'background-color': arg[0],
-                    'color': arg[1]
-                })
+                colorScheme.push(createSchemeFromColors([arg[0], arg[1]]))
             })
         }else
             this.setColorScheme(defaultColorScheme)
@@ -170,6 +168,21 @@ var Customize = function(config){
         updateColorScheme()
 
         return this
+    }
+
+    this.setColorSchemeForIndex = function(scheme, index){
+        if(index >= 0 && index < colorScheme.length){
+            if(isArray(scheme)){
+                colorScheme[index] = createSchemeFromColors(scheme)
+            }
+        }else{
+            this.addColorScheme(scheme)
+        }
+    }
+
+    this.addColorScheme = function(scheme){
+        if(isArray(scheme) && scheme.length > 1)
+            colorScheme.push(createSchemeFromColors(scheme))
     }
 
     this.getColorScheme = function(){
@@ -183,7 +196,7 @@ var Customize = function(config){
     }
 
     this.setCurrentClass = function(index){
-        if(index > 0 && index < watchedClasses.length) {
+        if(index >= 0 && index < watchedClasses.length) {
             //set name in dialogHeader
             $(".cm-currentClass").first().text(watchedClasses[index])
             currentClass = index
@@ -225,10 +238,19 @@ var Customize = function(config){
     /*** event handling ***/
 
     this.onNextClass = function(){
-        if(currentClass < watchedClasses.length)
+        if(currentClass < watchedClasses.length - 1)
             this.setCurrentClass(currentClass + 1)
         else
             this.setCurrentClass(0)
+    }
+
+    this.onPrevClass = function(){
+        if(currentClass > 0)
+            this.setCurrentClass(currentClass - 1)
+        else {
+            if (watchedClasses.length > 0)
+                this.setCurrentClass(watchedClasses.length - 1)
+        }
     }
     //currently in html...
 
@@ -236,6 +258,16 @@ var Customize = function(config){
 
     function isArray(obj){
         return Object.prototype.toString.call(obj) === '[object Array]'
+    }
+
+    function createSchemeFromColors(colors){
+        if(isArray(colors))
+            return {
+                'background-color': colors[0],
+                'color': colors[1]
+            }
+        else
+            console.log("invalid parameter for createSchemeFromColors: " + colors)
     }
 
     this.setConfig(config)

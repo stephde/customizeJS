@@ -97,9 +97,10 @@ describe("Customize JS test suite", function(){
             expect(cm.getColorScheme()[0]).toEqual(['white','black'])
         })
 
-        it("should set color scheme", function(){
-            cm.setColorScheme(colorScheme)
-            expect(cm.getColorScheme()).toEqual(colorScheme)
+        it("should add color scheme at the tail", function(){
+            cm.addColorScheme(colorScheme[0])
+            expect(cm.getColorScheme()[colorScheme.length]).toEqual(colorScheme[0])
+            expect(cm.getColorScheme()[colorScheme.length]).toEqual(colorScheme[0])
         })
     })
 
