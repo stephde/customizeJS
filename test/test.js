@@ -5,7 +5,8 @@
 describe("Customize JS test suite", function(){
     var cm = Customize(), //empty customizer
         classes = ["FirstClass", "Economy"],
-        colorScheme = [["white", "white"], ["blue", "red"]]
+        colorScheme = [["white", "white"], ["blue", "red"]],
+        borderScheme = [["solid", "white", "3px"],["dashed", "steelblue", "5px"]]
 
     it("should include customizeJS", function() {
         expect(Customize).not.toBeUndefined()
@@ -18,17 +19,21 @@ describe("Customize JS test suite", function(){
         })
 
         it("should set colorScheme from config", function() {
-            var scheme = [['black', 'white']],
-                cm = Customize({colorScheme: scheme})
+            var cm = Customize({colorScheme: colorScheme})
 
-            expect(cm.getColorScheme()).toEqual(scheme)
+            expect(cm.getColorScheme()).toEqual(colorScheme)
         })
 
         it("should set watchedClasses from config", function() {
-            var classes = ["class1", "class2"],
-                cm = Customize({watchedClasses: classes})
+            var cm = Customize({watchedClasses: classes})
 
             expect(cm.getWatchedClasses()).toEqual(classes)
+        })
+
+        it("should set borderScheme from config", function(){
+            var cm = Customize({borderScheme: borderScheme})
+
+            expect(cm.getBorderScheme()).toEqual(borderScheme)
         })
     })
 
@@ -67,8 +72,8 @@ describe("Customize JS test suite", function(){
         })
 
         it("should set default or parameter colors on the colorpickers", function(){
-            expect($("#cm-fontColorPicker").spectrum("get").toName()).toEqual("white")
-            expect($("#cm-bgColorPicker").spectrum("get").toName()).toEqual("black")
+            expect($("#cm-fontColorPicker").spectrum("get").toName()).toEqual(colorScheme[0][0])
+            expect($("#cm-bgColorPicker").spectrum("get").toName()).toEqual(colorScheme[0][1])
         })
     })
 
@@ -101,6 +106,11 @@ describe("Customize JS test suite", function(){
             cm.addColorScheme(colorScheme[0])
             expect(cm.getColorScheme()[colorScheme.length]).toEqual(colorScheme[0])
             expect(cm.getColorScheme()[colorScheme.length]).toEqual(colorScheme[0])
+        })
+
+        it("should set borderScheme", function(){
+            cm.setBorderScheme(borderScheme)
+            expect(cm.getBorderScheme()).toEqual(borderScheme)
         })
     })
 

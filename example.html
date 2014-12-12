@@ -28,14 +28,18 @@
 
 <h1 class="class1">Welcome!</h1>
 
+<div class="class3">
+    content...
+</div>
 <script>
     var cm = Customize({
-            colorScheme: [["#444","#bbb"],["#bbb", "#444"]],
-            watchedClasses: ["class1", "class2"]
+            colorScheme: [["#444","#bbb"],["#bbb", "#444"],["#000","#FFF"]],
+            watchedClasses: ["class1", "class2", "class3"],
+            borderScheme: [["solid", "white", "3px"],["dashed", "steelblue", "5px"]]
     })
 
 
-    /*** event handling ***/
+    /*** event handling, ToDo: to be moved into customizeJS module ***/
 
     function toggleCustomizeDialog(){
         $("#cm-dialog").toggleClass("cm-inactive")

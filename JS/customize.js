@@ -17,6 +17,7 @@ var Customize = function(config){
     var defaultColorScheme = [  ['white','black'],
                                 ['black','white']],
         colorScheme = [],
+        borderScheme = [],
         watchedClasses = [],
         currentClass = 0
 
@@ -31,6 +32,10 @@ var Customize = function(config){
 
             if (typeof(config.watchedClasses) != 'undefined') {
                 this.setWatchedClasses(config.watchedClasses)
+            }
+
+            if(typeof(config.borderScheme) != 'undefined') {
+                this.setBorderScheme(config.borderScheme)
             }
         }else
             this.setColorScheme()
@@ -158,7 +163,7 @@ var Customize = function(config){
         colorScheme = []
 
         //test if scheme is valid
-        if(typeof(scheme) != 'undefined') {
+        if(typeof(scheme) != 'undefined' && isArray(scheme)) {
             scheme.forEach(function (arg) {
                 colorScheme.push(createSchemeFromColors([arg[0], arg[1]]))
             })
@@ -213,8 +218,35 @@ var Customize = function(config){
 
         return this
     }
+
+    this.setBorderScheme = function(scheme){
+        borderScheme = []
+
+        if(typeof(scheme) != 'undefined' && isArray(scheme)){
+            scheme.forEach(function(arg){
+                borderScheme.push(createBorderScheme(arg))
+            })
+        }
+
+        updateBorderScheme()
+    }
+
+    this.getBorderScheme = function(){
+
+        var scheme = []
+
+        borderScheme.forEach(function(elem){
+            scheme.push([elem['border-style'], elem['border-color'], elem['border-width']])
+        })
+
+        return scheme
+    }
     /*** customizing colors ***/
 
+    this.update = function(){
+        updateColorScheme()
+        updateBorderScheme()
+    }
     function updateColorScheme(){
         watchedClasses.forEach(function(arg, i){
             if(i < colorScheme.length)
@@ -227,10 +259,22 @@ var Customize = function(config){
         })
     }
 
+    function updateBorderScheme(){
+        watchedClasses.forEach(function(arg, i){
+            if(i < borderScheme.length)
+                jss.set("." + arg, borderScheme[i])
+            else {
+                console.log("Not enough border schemes available to be set...")
+                if(i > 0)
+                    jss.set("." + arg, borderScheme[0])
+            }
+        })
+    }
+
     /*** render ***/
 
     this.render = function(){
-        updateColorScheme()
+        this.update()
 
         return this
     }
@@ -268,6 +312,16 @@ var Customize = function(config){
             }
         else
             console.log("invalid parameter for createSchemeFromColors: " + colors)
+    }
+
+    function createBorderScheme(params){
+        if(isArray(params) && params.length === 3){
+            return {
+                'border-style': params[0],
+                'border-color': params[1],
+                'border-width': params[2]
+            }
+        }
     }
 
     this.setConfig(config)
