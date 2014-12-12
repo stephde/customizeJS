@@ -6,7 +6,7 @@ describe("Customize JS test suite", function(){
     var cm = Customize(), //empty customizer
         classes = ["FirstClass", "Economy"],
         colorScheme = [["white", "white"], ["blue", "red"]],
-        borderScheme = [["solid", "white", "3px"],["dashed", "steelblue", "5px"]]
+        borderScheme = [["solid", "rgb(255, 255, 255)", "3px"],["dashed", "rgb(255, 0, 0)", "5px"]]
 
     it("should include customizeJS", function() {
         expect(Customize).not.toBeUndefined()
@@ -66,9 +66,29 @@ describe("Customize JS test suite", function(){
             div2.remove()
         })
 
-        it("should initialize the color pickers with spectrum", function(){
+        it("should have set border properties after initialization", function(){
+            var body = $("body")
+                div1 = $('<div>').addClass(classes[0]),
+                div2 = $('<div>').addClass(classes[1])
+            body.append(div1)
+            body.append(div2)
 
-            expect($(".cm-colorPickerContainer").children(".sp-replacer").length).toEqual(2)
+            Customize({watchedClasses: classes, borderScheme: borderScheme})
+
+            expect(div1.css("border-style")).toEqual(borderScheme[0][0])
+            expect(div1.css("border-color")).toEqual(borderScheme[0][1])
+            //expect(div1.css("border-width")).toEqual(borderScheme[0][2])
+
+            expect(div2.css("border-style")).toEqual(borderScheme[1][0])
+            expect(div2.css("border-color")).toEqual(borderScheme[1][1])
+            //expect(div2.css("border-width")).toEqual(borderScheme[1][2])
+
+            div1.remove()
+            div2.remove()
+        })
+
+        it("should initialize the color pickers with spectrum", function(){
+            expect($(".cm-colorPickerContainer").children(".sp-replacer").length).toEqual(3)
         })
 
         it("should set default or parameter colors on the colorpickers", function(){

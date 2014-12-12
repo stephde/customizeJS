@@ -57,7 +57,13 @@ var Customize = function(config){
                     $("#cm-fontColorPicker").spectrum("get").toHexString()]
                 )
 
+                if(currentClass < borderScheme.length )
+                    if(borderScheme[currentClass]) {
+                        borderScheme[currentClass]['border-color'] = $("#cm-borderColorPicker").spectrum("get").toHexString()
+                    }
+
                 updateColorScheme()
+                updateBorderScheme()
             }
         })
 
@@ -123,6 +129,25 @@ var Customize = function(config){
                 type: "text",
                 value: colorScheme[0]['background-color']
             }).addClass("cm-colorPicker"))
+
+            pc = $('<div>', {}).addClass("cm-colorPickerContainer")
+            dialog.append(pc)
+            pc.append($('<div>', {
+                text: "Border Color"
+            }).addClass("cm-colorPickerTitle"))
+            if(borderScheme.length > 0)
+                pc.append($('<input>', {
+                    id: "cm-borderColorPicker",
+                    type: "text",
+                    value: borderScheme[0]['border-color'],
+                    allowEmpty: true
+                }).addClass("cm-colorPicker"))
+            else
+                pc.append($('<input>', {
+                    id: "cm-borderColorPicker",
+                    type: "text",
+                    allowEmpty: true
+                }).addClass("cm-colorPicker"))
         }
 
         initSpectrum()
@@ -209,6 +234,11 @@ var Customize = function(config){
             //set color in ColorPickers
             $("#cm-fontColorPicker").spectrum("set", colorScheme[index]['color'])
             $("#cm-bgColorPicker").spectrum("set", colorScheme[index]['background-color'])
+
+            //set Border Properties
+            if(index < borderScheme.length){
+                $("#cm-borderColorPicker").spectrum("set", borderScheme[index]['border-color'])
+            }
             //set other dialog properties
         }else{
             console.log("trying to set invalid index for currentclass: " + index,
