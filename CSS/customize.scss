@@ -88,3 +88,33 @@
   font-size: larger;
   font-weight: bold;
 }
+
+.cm-dropdownMenuTitle {
+
+  &:hover {
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+#cm-borderStyleMenu {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.cm-dropdownItem {
+  width: 90%;
+  padding-left: 15px;
+  background-color: dimgray;
+  color: white;
+
+  &:hover{
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+    font-weight: normal !important;
+  }
+}

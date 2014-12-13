@@ -148,11 +148,66 @@ var Customize = function(config){
                     type: "text",
                     allowEmpty: true
                 }).addClass("cm-colorPicker"))
+
+            dialog.append(createBorderStyleMenu())
         }
 
         initSpectrum()
 
         this.render()
+    }
+
+    function createBorderStyleMenu(){
+        menu = $('<div>', {}).addClass("cm-colorPickerContainer")
+
+        menu.append($('<div>', {
+            text: "Border Style",
+            onclick: "toggleBorderStyleMenu()"
+        })).addClass("cm-dropdownMenuTitle")
+
+        borderStyleMenu = $('<ul>', {
+            id: "cm-borderStyleMenu"
+        }).addClass("cm-inactive")
+        menu.append(borderStyleMenu)
+
+        borderStyleMenu.append($('<li>', {
+            text: "solid",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "dashed",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "dotted",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "double",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "groove",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "inset",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "ridge",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "outset",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+        borderStyleMenu.append($('<li>', {
+            text: "none",
+            onclick: "setBorderStyle(this)"
+        }).addClass("cm-dropdownItem"))
+
+        return menu
     }
 
     /*** getter & setter ***/
@@ -259,6 +314,8 @@ var Customize = function(config){
         }
 
         updateBorderScheme()
+
+        return this
     }
 
     this.getBorderScheme = function(){
@@ -325,6 +382,14 @@ var Customize = function(config){
             if (watchedClasses.length > 0)
                 this.setCurrentClass(watchedClasses.length - 1)
         }
+    }
+
+    this.onSetBorderStyleFor = function(elem){
+        if(currentClass < borderScheme.length){
+            borderScheme[currentClass]['border-style'] = elem.innerText
+        }
+
+        updateBorderScheme()
     }
     //currently in html...
 

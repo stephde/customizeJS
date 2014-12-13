@@ -39,12 +39,20 @@
     })
 
 
-    /*** event handling, ToDo: to be moved into customizeJS module ***/
+    /*** event handling, ToDo: move into customizeJS module ***/
 
     function toggleCustomizeDialog(){
         $("#cm-dialog").toggleClass("cm-inactive")
     }
 
+    function toggleBorderStyleMenu(){
+        $("#cm-borderStyleMenu").toggleClass("cm-inactive")
+    }
+
+    function setBorderStyle(elem){
+        console.log(elem.innerText)
+        cm.onSetBorderStyleFor(elem)
+    }
     function nextClass(){
         cm.onNextClass()
     }
