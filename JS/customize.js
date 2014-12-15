@@ -145,6 +145,7 @@ var Customize = function(config){
 
         initSpectrum()
 
+        this.setCurrentClass(0)
         this.render()
     }
 
@@ -410,6 +411,8 @@ var Customize = function(config){
         }
 
         updateBorderScheme()
+
+        $("#cm-borderWidthInput").val(elem.value)
     }
 
     this.onSetBorderStyleFor = function(elem){

@@ -88,12 +88,16 @@ describe("Customize JS test suite", function(){
         })
 
         it("should initialize the color pickers with spectrum", function(){
-            expect($(".cm-colorPickerContainer").children(".sp-replacer").length).toEqual(3)
+            expect($(".cm-menuItemContainer").children(".sp-replacer").length).toEqual(3)
         })
 
-        it("should set default or parameter colors on the colorpickers", function(){
-            expect($("#cm-fontColorPicker").spectrum("get").toName()).toEqual(colorScheme[0][0])
-            expect($("#cm-bgColorPicker").spectrum("get").toName()).toEqual(colorScheme[0][1])
+        it("should set parameter colors on the colorpickers", function(){
+            expect($("#cm-fontColorPicker").first().spectrum("get").toName()).toEqual("black")
+            expect($("#cm-bgColorPicker").first().spectrum("get").toName()).toEqual("white")
+        })
+
+        it("should set the border width in the input field", function(){
+            expect($("#cm-borderWidthInput").val()).toEqual(borderScheme[0][2].replace("px",""))
         })
     })
 
@@ -149,6 +153,14 @@ describe("Customize JS test suite", function(){
 
             expect($("#cm-fontColorPicker").spectrum("get").toName()).toEqual(colorScheme[1][1])
             expect($("#cm-bgColorPicker").spectrum("get").toName()).toEqual(colorScheme[1][0])
+        })
+
+        it("should set border width on set border width", function(){
+            var elem = {}
+            elem.value = "10"
+            cm.onSetBorderWidth(elem)
+
+            expect($("#cm-borderWidthInput").val()).toEqual(elem.value)
         })
     })
 })
