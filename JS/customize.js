@@ -16,6 +16,7 @@ var Customize = function(config){
 
     var defaultColorScheme = [  ['white','black'],
                                 ['black','white']],
+        defaultBorderScheme = ['none', 'black', '0px']
         colorScheme = [],
         borderScheme = [],
         watchedClasses = [],
@@ -36,9 +37,12 @@ var Customize = function(config){
 
             if(typeof(config.borderScheme) != 'undefined') {
                 this.setBorderScheme(config.borderScheme)
-            }
-        }else
+            }else
+                this.setBorderScheme()
+        }else {
             this.setColorScheme()
+            this.setBorderScheme()
+        }
 
         return this
     }
@@ -52,7 +56,7 @@ var Customize = function(config){
                 $(".cm-dialog").addClass("cm-inactive")
             },
             change: function(color){
-                colorScheme[currentClass] = createSchemeFromColors(
+                colorScheme[currentClass] = createColorScheme(
                     [$("#cm-bgColorPicker").spectrum("get").toHexString(),
                     $("#cm-fontColorPicker").spectrum("get").toHexString()]
                 )
@@ -126,6 +130,17 @@ var Customize = function(config){
                 }).addClass("cm-colorPicker"))
 
             dialog.append(createBorderStyleMenu())
+
+            item = createMenuItem("Border Width")
+            item.append($('<input>', {
+                id: "cm-borderWidthInput",
+                type: "number",
+                value: 2,
+                min: 1,
+                max: 1000,
+                onchange: "setBorderWidth(this)"
+            }).addClass("cm-menuInput"))
+            dialog.append(item)
         }
 
         initSpectrum()
@@ -249,7 +264,7 @@ var Customize = function(config){
         //test if scheme is valid
         if(typeof(scheme) != 'undefined' && isArray(scheme)) {
             scheme.forEach(function (arg) {
-                colorScheme.push(createSchemeFromColors([arg[0], arg[1]]))
+                colorScheme.push(createColorScheme([arg[0], arg[1]]))
             })
         }else
             this.setColorScheme(defaultColorScheme)
@@ -262,7 +277,7 @@ var Customize = function(config){
     this.setColorSchemeForIndex = function(scheme, index){
         if(index >= 0 && index < colorScheme.length){
             if(isArray(scheme)){
-                colorScheme[index] = createSchemeFromColors(scheme)
+                colorScheme[index] = createColorScheme(scheme)
             }
         }else{
             this.addColorScheme(scheme)
@@ -271,7 +286,7 @@ var Customize = function(config){
 
     this.addColorScheme = function(scheme){
         if(isArray(scheme) && scheme.length > 1)
-            colorScheme.push(createSchemeFromColors(scheme))
+            colorScheme.push(createColorScheme(scheme))
     }
 
     this.getColorScheme = function(){
@@ -297,6 +312,7 @@ var Customize = function(config){
             //set Border Properties
             if(index < borderScheme.length){
                 $("#cm-borderColorPicker").spectrum("set", borderScheme[index]['border-color'])
+                $("#cm-borderWidthInput").val(borderScheme[index]['border-width'].replace("px", ""))
             }
             //set other dialog properties
         }else{
@@ -343,9 +359,8 @@ var Customize = function(config){
             if(i < colorScheme.length)
                 jss.set("." + arg, colorScheme[i])
             else {
-                console.log("Not enough color schemes available to be set...")
-                if(i > 0)
-                    jss.set("." + arg, colorScheme[0])
+                //create default color scheme
+                colorScheme.push(createColorScheme())
             }
         })
     }
@@ -355,9 +370,8 @@ var Customize = function(config){
             if(i < borderScheme.length)
                 jss.set("." + arg, borderScheme[i])
             else {
-                console.log("Not enough border schemes available to be set...")
-                if(i > 0)
-                    jss.set("." + arg, borderScheme[0])
+                //create default border scheme
+                borderScheme.push(createBorderScheme())
             }
         })
     }
@@ -388,6 +402,16 @@ var Customize = function(config){
         }
     }
 
+    this.onSetBorderWidth = function(elem){
+        var width = elem.value + "px"
+
+        if(currentClass < borderScheme.length){
+            borderScheme[currentClass]['border-width'] = width
+        }
+
+        updateBorderScheme()
+    }
+
     this.onSetBorderStyleFor = function(elem){
         if(currentClass < borderScheme.length){
             borderScheme[currentClass]['border-style'] = elem.innerText
@@ -395,7 +419,8 @@ var Customize = function(config){
 
         updateBorderScheme()
     }
-    //currently in html...
+
+    //currently called in example.html...
 
     /*** common functions ***/
 
@@ -403,22 +428,31 @@ var Customize = function(config){
         return Object.prototype.toString.call(obj) === '[object Array]'
     }
 
-    function createSchemeFromColors(colors){
-        if(isArray(colors))
+    function createColorScheme(colors){
+        if(typeof(colors) != 'undefined' && isArray(colors))
             return {
                 'background-color': colors[0],
                 'color': colors[1]
             }
         else
-            console.log("invalid parameter for createSchemeFromColors: " + colors)
+            return {
+                'background-color': defaultColorScheme[0][0],
+                'color': defaultColorScheme[0][1]
+            }
     }
 
     function createBorderScheme(params){
-        if(isArray(params) && params.length === 3){
+        if(typeof(params) != 'undefined' && isArray(params) && params.length >= 3){
             return {
                 'border-style': params[0],
                 'border-color': params[1],
                 'border-width': params[2]
+            }
+        }else{
+            return {
+                'border-style': defaultBorderScheme[0],
+                'border-color': defaultBorderScheme[1],
+                'border-width': defaultBorderScheme[2]
             }
         }
     }

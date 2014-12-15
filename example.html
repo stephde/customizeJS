@@ -35,7 +35,7 @@
     var cm = Customize({
             colorScheme: [["#444","#bbb"],["#bbb", "#444"],["#000","#FFF"]],
             watchedClasses: ["class1", "class2", "class3"],
-            borderScheme: [["solid", "white", "3px"],["dashed", "steelblue", "5px"]]
+            borderScheme: [["solid", "white", "3px"],["outset", "steelblue", "5px"]]
     })
 
 
@@ -50,8 +50,11 @@
     }
 
     function setBorderStyle(elem){
-        console.log(elem.innerText)
         cm.onSetBorderStyleFor(elem)
+    }
+
+    function setBorderWidth(elem){
+        cm.onSetBorderWidth(elem)
     }
     function nextClass(){
         cm.onNextClass()

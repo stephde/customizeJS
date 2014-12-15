@@ -66,6 +66,11 @@
 .cm-colorPicker {
   float: right; }
 
+.cm-menuInput {
+  float: right;
+  height: 25px;
+  width: 50px; }
+
 .cm-currentClass {
   width: 100%;
   text-align: center;
