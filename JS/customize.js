@@ -94,56 +94,32 @@ var Customize = function(config){
             }).addClass("cm-inactive"))
             container.append(dialog)
 
-            var dialogHeader = $('<div>', {}).addClass("cm-dialogHeader")
-            dialog.append(dialogHeader)
-
-            dialogHeader.append($('<div>', {
-                onclick: "prevClass()"
-            }).addClass("cm-arrowLeft"))
-            dialogHeader.append($('<div>', {
-                text: ""
-            }).addClass("cm-currentClass"))
-            dialogHeader.append($('<div>', {
-                onclick: "nextClass()"
-            }).addClass("cm-arrowRight"))
+            dialog.append(createDialogHeader())
 
             //add color Pickers
-            var pc = $('<div>', {}).addClass("cm-colorPickerContainer")
-            dialog.append(pc)
-            pc.append($('<div>', {
-                text: "Font Color"
-            }).addClass("cm-colorPickerTitle"))
-            pc.append($('<input>', {
+            dialog.append(createMenuItem("Font Color", $('<input>', {
                 id: "cm-fontColorPicker",
                 type: "text",
                 value: colorScheme[0]['color']
-            }).addClass("cm-colorPicker"))
+            }).addClass("cm-colorPicker")))
 
-            pc = $('<div>', {}).addClass("cm-colorPickerContainer")
-            dialog.append(pc)
-            pc.append($('<div>', {
-                text: "Background Color"
-            }).addClass("cm-colorPickerTitle"))
-            pc.append($('<input>', {
+            dialog.append(createMenuItem( "Background Color",$('<input>', {
                 id: "cm-bgColorPicker",
                 type: "text",
                 value: colorScheme[0]['background-color']
-            }).addClass("cm-colorPicker"))
+            }).addClass("cm-colorPicker")))
 
-            pc = $('<div>', {}).addClass("cm-colorPickerContainer")
-            dialog.append(pc)
-            pc.append($('<div>', {
-                text: "Border Color"
-            }).addClass("cm-colorPickerTitle"))
+            var item = createMenuItem("Border Color")
+            dialog.append(item)
             if(borderScheme.length > 0)
-                pc.append($('<input>', {
+                item.append($('<input>', {
                     id: "cm-borderColorPicker",
                     type: "text",
                     value: borderScheme[0]['border-color'],
                     allowEmpty: true
                 }).addClass("cm-colorPicker"))
             else
-                pc.append($('<input>', {
+                item.append($('<input>', {
                     id: "cm-borderColorPicker",
                     type: "text",
                     allowEmpty: true
@@ -157,8 +133,36 @@ var Customize = function(config){
         this.render()
     }
 
+    function createDialogHeader(){
+        var dialogHeader = $('<div>', {}).addClass("cm-dialogHeader")
+
+        dialogHeader.append($('<div>', {
+            onclick: "prevClass()"
+        }).addClass("cm-arrowLeft"))
+        dialogHeader.append($('<div>', {
+            text: ""
+        }).addClass("cm-currentClass"))
+        dialogHeader.append($('<div>', {
+            onclick: "nextClass()"
+        }).addClass("cm-arrowRight"))
+
+        return dialogHeader
+    }
+
+    function createMenuItem(name, child){
+        var item = $('<div>', {}).addClass("cm-menuItemContainer")
+        item.append($('<div>', {
+            text: name
+        }).addClass("cm-menuItemTitle"))
+
+        if(typeof(child) != 'undefined' && !$.isEmptyObject(child))
+            item.append(child)
+
+        return item
+    }
+
     function createBorderStyleMenu(){
-        menu = $('<div>', {}).addClass("cm-colorPickerContainer")
+        menu = $('<div>', {}).addClass("cm-menuItemContainer")
 
         menu.append($('<div>', {
             text: "Border Style",
