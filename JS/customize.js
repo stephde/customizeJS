@@ -16,7 +16,8 @@ var Customize = function(config){
 
     var defaultColorScheme = [  ['white','black'],
                                 ['black','white']],
-        defaultBorderScheme = ['none', 'black', '0px']
+        defaultBorderScheme = ['none', 'black', '0px'],
+        defaultLogoPosition = {top: "15px", right: "15px"},
         colorScheme = [],
         borderScheme = [],
         watchedClasses = [],
@@ -44,6 +45,11 @@ var Customize = function(config){
             if(typeof(config.hide) != 'undefined') {
                 hide = config.hide
             }
+
+            if(typeof(config.logoPosition) != 'undefined') {
+                this.setLogoPosition(config.logoPosition)
+            }else
+                this.setLogoPosition("top-right")
 
         }else {
             this.setColorScheme()
@@ -369,12 +375,48 @@ var Customize = function(config){
         return hide
     }
 
+    this.setLogoPosition = function(strPos){
+        var logoPos
+
+        switch(strPos){
+            case "top-left":
+                logoPos = {
+                    top: "15px",
+                    left: "15px"
+                }
+                break
+            case "top-right":
+                logoPos = {
+                    top: "15px",
+                    right: "15px"
+                }
+                break;
+            case "bottom-left":
+                logoPos = {
+                    bottom: "15px",
+                    left: "15px"
+                }
+                break
+            case "bottom-right":
+                logoPos = {
+                    bottom: "15px",
+                    right: "15px"
+                }
+                break
+            default:
+                logoPos = defaultLogoPosition
+                console.log("no such position as: " + strPos)
+        }
+
+        jss.set("#cm-container", logoPos)
+    }
     /*** customizing colors ***/
 
     this.update = function(){
         updateColorScheme()
         updateBorderScheme()
     }
+
     function updateColorScheme(){
         watchedClasses.forEach(function(arg, i){
             if(i < colorScheme.length)

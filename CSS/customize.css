@@ -33,13 +33,10 @@
 
 #cm-container {
   position: absolute;
-  top: 15px;
-  right: 15px; }
+  display: flex; }
 
 #cm-dialog {
-  position: absolute;
-  top: 50px;
-  right: 15px;
+  display: inline-block;
   width: 200px;
   background-color: lightgray;
   border: solid black 1px;
