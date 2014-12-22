@@ -35,6 +35,12 @@ describe("Customize JS test suite", function(){
 
             expect(cm.getBorderScheme()).toEqual(borderScheme)
         })
+
+        it("should set hide from config", function(){
+            var cm = Customize({hide: true})
+
+            expect($('#cm-container').hasClass('cm-inactive')).toBeTruthy()
+        })
     })
 
     describe("initialization of Customize", function(){
@@ -135,6 +141,11 @@ describe("Customize JS test suite", function(){
         it("should set borderScheme", function(){
             cm.setBorderScheme(borderScheme)
             expect(cm.getBorderScheme()).toEqual(borderScheme)
+        })
+
+        it("should set hide", function(){
+            cm.setHide(true)
+            expect(cm.getHide()).toEqual(true)
         })
     })
 

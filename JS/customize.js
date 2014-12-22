@@ -20,7 +20,8 @@ var Customize = function(config){
         colorScheme = [],
         borderScheme = [],
         watchedClasses = [],
-        currentClass = 0
+        currentClass = 0,
+        hide = false
 
     /*** config ***/
 
@@ -39,6 +40,11 @@ var Customize = function(config){
                 this.setBorderScheme(config.borderScheme)
             }else
                 this.setBorderScheme()
+
+            if(typeof(config.hide) != 'undefined') {
+                hide = config.hide
+            }
+
         }else {
             this.setColorScheme()
             this.setBorderScheme()
@@ -146,6 +152,7 @@ var Customize = function(config){
         initSpectrum()
 
         this.setCurrentClass(0)
+        this.setHide(hide)
         this.render()
     }
 
@@ -349,6 +356,19 @@ var Customize = function(config){
 
         return scheme
     }
+
+    this.setHide = function(val){
+        hide = val
+
+        $('#cm-container').toggleClass("cm-inactive", val)
+
+        return this
+    }
+
+    this.getHide = function(){
+        return hide
+    }
+
     /*** customizing colors ***/
 
     this.update = function(){
