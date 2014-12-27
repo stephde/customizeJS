@@ -18,11 +18,13 @@ var Customize = function(config){
                                 ['black','white']],
         defaultBorderScheme = ['none', 'black', '0px'],
         defaultLogoPosition = {top: "15px", right: "15px"},
+        defaultFontSize = "14px",
         colorScheme = [],
         borderScheme = [],
         watchedClasses = [],
+        fontSizes = [],
         currentClass = 0,
-        hide = false
+        hideDialog = false
 
     /*** config ***/
 
@@ -42,14 +44,18 @@ var Customize = function(config){
             }else
                 this.setBorderScheme()
 
-            if(typeof(config.hide) != 'undefined') {
-                hide = config.hide
+            if(typeof(config.hideDialog) != 'undefined') {
+                hideDialog = config.hideDialog
             }
 
             if(typeof(config.logoPosition) != 'undefined') {
                 this.setLogoPosition(config.logoPosition)
             }else
                 this.setLogoPosition("top-right")
+
+            if(typeof(config.fontSizes) != 'undefined') {
+                this.setFontSizes(config.fontSizes)
+            }
 
         }else {
             this.setColorScheme()
@@ -68,7 +74,7 @@ var Customize = function(config){
                 $(".cm-dialog").addClass("cm-inactive")
             },
             change: function(color){
-                colorScheme[currentClass] = createColorScheme(
+                colorScheme[currentClass] = createColorCSS(
                     [$("#cm-bgColorPicker").spectrum("get").toHexString(),
                     $("#cm-fontColorPicker").spectrum("get").toHexString()]
                 )
@@ -119,7 +125,16 @@ var Customize = function(config){
                 value: colorScheme[0]['color']
             }).addClass("cm-colorPicker")))
 
-            dialog.append(createMenuItem( "Background Color",$('<input>', {
+            dialog.append(createMenuItem("Font Size", $('<input>',{
+                id: "cm-fontSizeInput",
+                type: "number",
+                value: 14,
+                min: 1,
+                max: 100,
+                onchange: "setFontSize(this)"
+            }).addClass("cm-menuInput")))
+
+            dialog.append(createMenuItem("Background Color", $('<input>', {
                 id: "cm-bgColorPicker",
                 type: "text",
                 value: colorScheme[0]['background-color']
@@ -158,7 +173,7 @@ var Customize = function(config){
         initSpectrum()
 
         this.setCurrentClass(0)
-        this.setHide(hide)
+        this.setHide(hideDialog)
         this.render()
     }
 
@@ -278,7 +293,7 @@ var Customize = function(config){
         //test if scheme is valid
         if(typeof(scheme) != 'undefined' && isArray(scheme)) {
             scheme.forEach(function (arg) {
-                colorScheme.push(createColorScheme([arg[0], arg[1]]))
+                colorScheme.push(createColorCSS([arg[0], arg[1]]))
             })
         }else
             this.setColorScheme(defaultColorScheme)
@@ -300,7 +315,7 @@ var Customize = function(config){
 
     this.addColorScheme = function(scheme){
         if(isArray(scheme) && scheme.length > 1)
-            colorScheme.push(createColorScheme(scheme))
+            colorScheme.push(createColorCSS(scheme))
     }
 
     this.getColorScheme = function(){
@@ -328,7 +343,10 @@ var Customize = function(config){
                 $("#cm-borderColorPicker").spectrum("set", borderScheme[index]['border-color'])
                 $("#cm-borderWidthInput").val(borderScheme[index]['border-width'].replace("px", ""))
             }
-            //set other dialog properties
+            //set Font Size
+            if(index < fontSizes.length)
+                $("#cm-fontSizeInput").val(fontSizes[index].replace("px",""))
+
         }else{
             console.log("trying to set invalid index for currentclass: " + index,
                         " maxindex: " + watchedClasses.length)
@@ -343,7 +361,7 @@ var Customize = function(config){
 
         if(typeof(scheme) != 'undefined' && isArray(scheme)){
             scheme.forEach(function(arg){
-                borderScheme.push(createBorderScheme(arg))
+                borderScheme.push(createBorderCSS(arg))
             })
         }
 
@@ -364,7 +382,7 @@ var Customize = function(config){
     }
 
     this.setHide = function(val){
-        hide = val
+        hideDialog = val
 
         $('#cm-container').toggleClass("cm-inactive", val)
 
@@ -372,7 +390,7 @@ var Customize = function(config){
     }
 
     this.getHide = function(){
-        return hide
+        return hideDialog
     }
 
     this.setLogoPosition = function(strPos){
@@ -410,11 +428,24 @@ var Customize = function(config){
 
         jss.set("#cm-container", logoPos)
     }
+
+    this.setFontSizes = function(sizes){
+        fontSizes = sizes
+
+        updateFontSizes()
+
+        return this
+    }
+
+    this.getFontSizes = function(){
+        return fontSizes
+    }
     /*** customizing colors ***/
 
     this.update = function(){
         updateColorScheme()
         updateBorderScheme()
+        updateFontSizes()
     }
 
     function updateColorScheme(){
@@ -423,7 +454,8 @@ var Customize = function(config){
                 jss.set("." + arg, colorScheme[i])
             else {
                 //create default color scheme
-                colorScheme.push(createColorScheme())
+                colorScheme.push(createColorCSS())
+                jss.set("." + arg, colorScheme[i])
             }
         })
     }
@@ -434,7 +466,19 @@ var Customize = function(config){
                 jss.set("." + arg, borderScheme[i])
             else {
                 //create default border scheme
-                borderScheme.push(createBorderScheme())
+                borderScheme.push(createBorderCSS())
+                jss.set("." + arg, borderScheme[i])
+            }
+        })
+    }
+
+    function updateFontSizes(){
+        watchedClasses.forEach(function(arg, i){
+            if(i < fontSizes.length)
+                jss.set("." + arg, createFontSizeCSS(fontSizes[i]))
+            else {
+                jss.set("." + arg, createFontSizeCSS(defaultFontSize))
+                fontSizes.push(defaultFontSize)
             }
         })
     }
@@ -485,6 +529,18 @@ var Customize = function(config){
         updateBorderScheme()
     }
 
+    this.onSetFontSize = function(elem){
+        var size = elem.value + "px"
+
+        if(currentClass < fontSizes.length){
+            fontSizes[currentClass] = size
+        }
+
+        updateFontSizes()
+
+        $("#cm-fontSizeInput").val(elem.value)
+    }
+
     //currently called in example.html...
 
     /*** common functions ***/
@@ -493,7 +549,7 @@ var Customize = function(config){
         return Object.prototype.toString.call(obj) === '[object Array]'
     }
 
-    function createColorScheme(colors){
+    function createColorCSS(colors){
         if(typeof(colors) != 'undefined' && isArray(colors))
             return {
                 'background-color': colors[0],
@@ -506,7 +562,7 @@ var Customize = function(config){
             }
     }
 
-    function createBorderScheme(params){
+    function createBorderCSS(params){
         if(typeof(params) != 'undefined' && isArray(params) && params.length >= 3){
             return {
                 'border-style': params[0],
@@ -518,6 +574,18 @@ var Customize = function(config){
                 'border-style': defaultBorderScheme[0],
                 'border-color': defaultBorderScheme[1],
                 'border-width': defaultBorderScheme[2]
+            }
+        }
+    }
+
+    function createFontSizeCSS(params){
+        if(typeof(params) != 'undefined'){
+            return {
+                'font-size': params
+            }
+        }else{
+            return {
+                'font-size': defaultFontSize
             }
         }
     }

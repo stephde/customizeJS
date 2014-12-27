@@ -3,10 +3,18 @@
  */
 
 describe("Customize JS test suite", function(){
-    var cm = Customize(), //empty customizer
-        classes = ["FirstClass", "Economy"],
+    var classes = ["FirstClass", "Economy"],
         colorScheme = [["white", "white"], ["blue", "red"]],
-        borderScheme = [["solid", "rgb(255, 255, 255)", "3px"],["dashed", "rgb(255, 0, 0)", "5px"]]
+        borderScheme = [["solid", "rgb(255, 255, 255)", "3px"],["dashed", "rgb(255, 0, 0)", "5px"]],
+        fontSizes = ["12px", "16px", "14px"]
+
+    var cm = Customize({
+        colorScheme: colorScheme,
+        watchedClasses: classes,
+        borderScheme: borderScheme,
+        hideDialog: true,
+        fontSizes: fontSizes
+    })
 
     it("should include customizeJS", function() {
         expect(Customize).not.toBeUndefined()
@@ -19,27 +27,30 @@ describe("Customize JS test suite", function(){
         })
 
         it("should set colorScheme from config", function() {
-            var cm = Customize({colorScheme: colorScheme})
-
             expect(cm.getColorScheme()).toEqual(colorScheme)
         })
 
         it("should set watchedClasses from config", function() {
-            var cm = Customize({watchedClasses: classes})
-
             expect(cm.getWatchedClasses()).toEqual(classes)
         })
 
         it("should set borderScheme from config", function(){
-            var cm = Customize({borderScheme: borderScheme})
-
             expect(cm.getBorderScheme()).toEqual(borderScheme)
         })
 
         it("should set hide from config", function(){
-            var cm = Customize({hide: true})
-
+            var cm = Customize({
+                colorScheme: colorScheme,
+                watchedClasses: classes,
+                borderScheme: borderScheme,
+                fontSizes: fontSizes,
+                hideDialog: true
+            })
             expect($('#cm-container').hasClass('cm-inactive')).toBeTruthy()
+        })
+
+        it("should set font size from config", function(){
+            expect(cm.getFontSizes()).toEqual(fontSizes)
         })
     })
 
@@ -104,6 +115,10 @@ describe("Customize JS test suite", function(){
 
         it("should set the border width in the input field", function(){
             expect($("#cm-borderWidthInput").val()).toEqual(borderScheme[0][2].replace("px",""))
+        })
+
+        it("should set font sizes in the fontsize input field", function(){
+            expect($("#cm-fontSizeInput").val()).toEqual(fontSizes[0].replace("px",""))
         })
     })
 

@@ -36,7 +36,8 @@
             colorScheme: [["#444","#bbb"],["#bbb", "#444"],["#000","#FFF"]],
             watchedClasses: ["class1", "class2", "class3"],
             borderScheme: [["solid", "white", "3px"],["outset", "steelblue", "5px"]],
-            logoPosition: "top-right"
+            logoPosition: "top-right",
+            fontSizes: ["35px", "16px", "14px"]
         })
 
 
@@ -55,6 +56,9 @@
     }
     function setBorderWidth(elem){
         cm.onSetBorderWidth(elem)
+    }
+    function setFontSize(elem){
+        cm.onSetFontSize(elem)
     }
     function nextClass(){
         cm.onNextClass()
