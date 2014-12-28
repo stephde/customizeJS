@@ -31,7 +31,9 @@
 <div class="class3">
     content...
 </div>
+
 <script>
+
     var cm = Customize({
             colorScheme: [["#444","#bbb"],["#bbb", "#444"],["#000","#FFF"]],
             watchedClasses: ["class1", "class2", "class3"],
@@ -40,32 +42,6 @@
             fontSizes: ["35px", "16px", "14px"]
         })
 
-
-    /*** event handling, ToDo: move into customizeJS module ***/
-
-    function toggleCustomizeDialog(){
-        $("#cm-dialog").toggleClass("cm-inactive")
-    }
-
-    function toggleBorderStyleMenu(){
-        $("#cm-borderStyleMenu").toggleClass("cm-inactive")
-    }
-
-    function setBorderStyle(elem){
-        cm.onSetBorderStyleFor(elem)
-    }
-    function setBorderWidth(elem){
-        cm.onSetBorderWidth(elem)
-    }
-    function setFontSize(elem){
-        cm.onSetFontSize(elem)
-    }
-    function nextClass(){
-        cm.onNextClass()
-    }
-    function prevClass(){
-        cm.onPrevClass()
-    }
 </script>
 
 </body>

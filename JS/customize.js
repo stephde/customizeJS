@@ -19,6 +19,7 @@ var Customize = function(config){
         defaultBorderScheme = ['none', 'black', '0px'],
         defaultLogoPosition = {top: "15px", right: "15px"},
         defaultFontSize = "14px",
+        borderStyleTypes = ["solid", "dashed", "dotted", "double", "groove", "inset", "ridge", "outset", "none"]
         colorScheme = [],
         borderScheme = [],
         watchedClasses = [],
@@ -107,7 +108,7 @@ var Customize = function(config){
             container.append($('<img>', {
                 src: "img/logo.svg",
                 alt: "customizeJS logo",
-                onclick: "toggleCustomizeDialog()" //ToDo: adjust method call using events
+                onclick: "$('#cm-dialog').toggleClass('cm-inactive')" //ToDo: adjust method call using events
             }).addClass("cm-logo"))
 
             //add dialog container
@@ -131,7 +132,7 @@ var Customize = function(config){
                 value: 14,
                 min: 1,
                 max: 100,
-                onchange: "setFontSize(this)"
+                onchange: "cm.onSetFontSize(this)"
             }).addClass("cm-menuInput")))
 
             dialog.append(createMenuItem("Background Color", $('<input>', {
@@ -165,7 +166,7 @@ var Customize = function(config){
                 value: 2,
                 min: 1,
                 max: 1000,
-                onchange: "setBorderWidth(this)"
+                onchange: "cm.onSetBorderWidth(this)"
             }).addClass("cm-menuInput"))
             dialog.append(item)
         }
@@ -181,13 +182,13 @@ var Customize = function(config){
         var dialogHeader = $('<div>', {}).addClass("cm-dialogHeader")
 
         dialogHeader.append($('<div>', {
-            onclick: "prevClass()"
+            onclick: "cm.onPrevClass()"
         }).addClass("cm-arrowLeft"))
         dialogHeader.append($('<div>', {
             text: ""
         }).addClass("cm-currentClass"))
         dialogHeader.append($('<div>', {
-            onclick: "nextClass()"
+            onclick: "cm.onNextClass()"
         }).addClass("cm-arrowRight"))
 
         return dialogHeader
@@ -210,7 +211,7 @@ var Customize = function(config){
 
         menu.append($('<div>', {
             text: "Border Style",
-            onclick: "toggleBorderStyleMenu()"
+            onclick: "$('#cm-borderStyleMenu').toggleClass('cm-inactive')"
         })).addClass("cm-dropdownMenuTitle")
 
         borderStyleMenu = $('<ul>', {
@@ -218,42 +219,12 @@ var Customize = function(config){
         }).addClass("cm-inactive")
         menu.append(borderStyleMenu)
 
-        borderStyleMenu.append($('<li>', {
-            text: "solid",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "dashed",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "dotted",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "double",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "groove",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "inset",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "ridge",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "outset",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
-        borderStyleMenu.append($('<li>', {
-            text: "none",
-            onclick: "setBorderStyle(this)"
-        }).addClass("cm-dropdownItem"))
+        borderStyleTypes.forEach(function(type){
+            borderStyleMenu.append($('<li>', {
+                text: type,
+                onclick: "cm.onSetBorderStyleFor(this)"
+            }).addClass("cm-dropdownItem"))
+        })
 
         return menu
     }
@@ -427,6 +398,8 @@ var Customize = function(config){
         }
 
         jss.set("#cm-container", logoPos)
+
+        return this
     }
 
     this.setFontSizes = function(sizes){
@@ -446,6 +419,8 @@ var Customize = function(config){
         updateColorScheme()
         updateBorderScheme()
         updateFontSizes()
+
+        return this
     }
 
     function updateColorScheme(){
@@ -540,8 +515,6 @@ var Customize = function(config){
 
         $("#cm-fontSizeInput").val(elem.value)
     }
-
-    //currently called in example.html...
 
     /*** common functions ***/
 
